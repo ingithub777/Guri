@@ -1,3 +1,0 @@
-sdasd
-
-Fuck this computer
