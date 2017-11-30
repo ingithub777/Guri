@@ -18,7 +18,7 @@ while True:
             break
         while True:
             print(c*c_count,end='')
-            print(d*d_count)
+            print(d*d_count+"|")
             if d_count == b:
                 break
             d_count += 2
