@@ -9,5 +9,4 @@ while True:
     f.write("["+c[0]+c[1]+c[2]+"]")
     f.write(" "+a+"\n")
     print("설문에 응답해 주셔서 감사합니다.")
-    if b == "종료":
-        break
+    break

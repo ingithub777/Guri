@@ -15,10 +15,11 @@ class Calculator:
         result1 = (self.cal[0]+self.cal[1]+self.cal[2]+self.cal[3]+self.cal[4])/5
         print(result1)
 
-# cal1 = Calculator([1,2,3,4,5])
-# cal1.sum()
-# cal1.avg()
-#
-# cal2 = Calculator([6,7,8,9,10])
-# cal2.sum()
-# cal2.avg()
+if __name__ =="__main__":
+    cal1 = Calculator([1,2,3,4,5])
+    cal1.sum()
+    cal1.avg()
+
+    cal2 = Calculator([6,7,8,9,10])
+    cal2.sum()
+    cal2.avg()
