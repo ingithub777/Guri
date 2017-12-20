@@ -1,30 +1,64 @@
-try:
-    f = open("E:\python\memo.txt", 'r')
+import sys
+option = sys.argv[1]
+
+if option == '-a':
+    try:
+        memo = sys.argv[2]
+        f = open("E:\python\memo.txt", 'r')
+        f.close()
+        f = open("E:\python\memo.txt", 'a')
+        f.write(memo)
+        f.write('\n')
+        f.close()
+    except FileNotFoundError as e:
+        a = input("""memo.txt 파일이 없습니다. 아래 중 선택하세요. 
+         1. 새로 생성하시겠습니까?
+         2. 변경된 파일 경로 입력하시겠습니까?
+         입력 : """)
+        while True:
+            if a == "1":
+                f = open("E:\python\memo.txt",'a')
+                memo = sys.argv[2]
+                f.write(memo)
+                f.write('\n')
+                f.close()
+                break
+            elif a == "2":
+                b = input("변경된 파일 경로를 입력하세요. : ")
+                f = open(b,'a')
+                memo = sys.argv[2]
+                f.write(memo)
+                f.write('\n')
+                f.close()
+                break
+
+elif option == '-au':
+    memo = sys.argv[2]
+    memo_u = memo.upper()
+    f = open("E:\python\memo.txt", 'a')
+    f.write(memo_u)
+    f.write('\n')
     f.close()
-except FileNotFoundError as e:
-    a = input("""memo.txt 파일이 없습니다. 아래 중 선택하세요. 
-     1. 새로 생성하시겠습니까?
-     2. 파일 경로를 입력하겠습니다.
-     입력 : """)
+    print(memo_u)
 
-    while True:
-        if a == "1":
-            f = open("E:\python\memo.txt", 'r')
-            break
-        elif a == "2":
-            b = input("변경된 파일 경로를 입력하세요. : ")
-            f = open(b,'a')
-            break
-
-
-
-            # while True:
-            #     a = input("프로그래밍이 왜 좋으세요? : ")
-            #     if a == "1":
-            #         break
-            #     b = input("성함이 어떻게 되세요? : ")
-            #     c = list(b)
-            #     f.write("[" + c[0] + c[1] + c[2] + "]")
-            #     f.write(" " + a + "\n")
-            #     print("설문에 응답해 주셔서 감사합니다.")
-            #     continue
+elif option == '-v':
+    try:
+        f = open("E:\python\memo.txt", 'r')
+        memo_txt = f.read()
+        print(memo_txt)
+        f.close()
+    except FileNotFoundError as e:
+        a = input("""memo.txt 파일이 없습니다. 아래 중 선택하세요. 
+         1. 종료하시겠습니까?
+         2. 변경된 파일 경로 입력하시겠습니까?
+         입력 : """)
+        while True:
+            if a == "1":
+                break
+            elif a == "2":
+                b = input("변경된 파일 경로를 입력하세요. : ")
+                f = open(b,'r')
+                memo_txt = f.read()
+                f.close()
+                print(memo_txt)
+                break
