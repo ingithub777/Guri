@@ -1,14 +1,9 @@
-import sys
-import io
-
-sys.stdout = io.TextIOWrapper(sys.stdout.detach(), encoding='utf-8')
-sys.stderr = io.TextIOWrapper(sys.stderr.detach(), encoding='utf-8')
-
-def test():'''
+def ex():'''
 다음 입사문제 중에서
 1차원의 점들이 주어졌을 때, 그 중 가장 거리가 짧은 것의 쌍을 출력하는 함수를 작성하시오.
 (단 점들의 배열은 모두 정렬되어있다고 가정한다.)
 '''
+help(ex) # docstring 연습
 
 import random
 # points = list({1, 3, 4, 8, 13, 17, 20})
@@ -34,6 +29,3 @@ for i in range(len(distances)):
         print(distances[i][0],"~",distances[i][1],end='')
     else:
         print(distances[i][0],"~",distances[i][1],end=', ')
-
-
-help(test) # docstring 연습
