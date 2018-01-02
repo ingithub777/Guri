@@ -53,7 +53,7 @@ def my_min(row_instance):
 
 def my_deviation(row_instance):
     dev_element = my_averge(row_instance)
-
+    dev_element = dev_element
     for i in row_instance:
         print(i,"-",dev_element,"=",i-dev_element)
 
