@@ -51,13 +51,17 @@ def my_max(row_instance):
 def my_min(row_instance):
     return min(row_instance)
 
+def my_deviation(row_instance):
+    dev_element = my_averge(row_instance)
 
+    for i in row_instance:
+        print(i,"-",dev_element,"=",i-dev_element)
 
 with open("Demographic_Statistics_By_Zip_Code.csv", newline='') as file :
     data = list(csv.reader(file))
 
 while 1 :
-    access_type = input("Access 데이터 유형을 선택하십시오.(1:행 2:열 3:총합 4:평균 5:최대값 6:최소값 28:종료) : ")
+    access_type = input("Access 데이터 유형을 선택하십시오.(1:행 2:열 3:총합 4:평균 5:최대값 6:최소값 7:편차 28:종료) : ")
     if access_type == '28' : break
     elif access_type == '1' :
         search_primary_key = input("Access하려는 Primary_key를 입력하세요. : ")
@@ -106,4 +110,12 @@ while 1 :
             print_type = "int"
         row_instance = get_csv_row_Instance(search_row_info)
         print(my_min(check_type(row_instance)))
+    elif access_type == '7' :
+        search_row_info = input("편차값을 구하고싶은 Primary_key를 입력하십시오 : ")
+        try :
+            print_type = search_row_info[1]
+        except :
+            print_type = "int"
+        row_instance = get_csv_row_Instance(search_row_info)
+        print(my_deviation(check_type(row_instance)))
 
