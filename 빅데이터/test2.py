@@ -25,8 +25,8 @@ def get_csv_row_instance(row_name):
         row_instance.append(row[row_index])
     return row_instance
 
-with open("Demographic_Statistics_By_Zip_Code.csv", newline='') as file:
-    data = list(csv.reader(file))
+# with open("Demographic_Statistics_By_Zip_Code.csv", newline='') as file:
+#     data = list(csv.reader(file))
 
 while 1:
     access_type = input("Access 유형을 선택해주세요. (1:행 2:열 3: 종료) : ")
