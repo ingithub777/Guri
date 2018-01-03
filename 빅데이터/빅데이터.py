@@ -1,7 +1,6 @@
 import csv
 
 def get_csv_row_Instance(row_name) :
-
     row_instance = []
     row_index = data[0].index(row_name)
     for row in data[1:]:
@@ -58,16 +57,16 @@ def my_deviation(row_instance):
         print(i,"-",dev_element,"=",i-dev_element)
 
 # def my_standard_devuation(row_instance):
-def my_variance(row_instance):
-    dev_element = my_averge(row_instance)
-    dev_element = dev_element
-    i = []
-    for i in row_instance:
-        var_element = i*i
-        var_sum = []
-        for j in var_element:
-            var_sum += j
-            return var_sum
+# def my_variance(row_instance):
+#     dev_element = my_averge(row_instance)
+#     dev_element = dev_element
+#     i = []
+#     for i in row_instance:
+#         var_element = i*i
+#         var_sum = []
+#         for j in var_element:
+#             var_sum += j
+#             return var_sum
 
 with open("Demographic_Statistics_By_Zip_Code.csv", newline='') as file :
     data = list(csv.reader(file))
@@ -79,10 +78,7 @@ while 1 :
         search_primary_key = input("Access하려는 Primary_key를 입력하세요. : ")
         print_col(get_csv_col_Instance(search_primary_key))
     elif access_type == '2' :
-        search_row_info = input("찾고싶은 Primary_key와 출력타입(기본은 int형)을 입력하십시오.(, )로 구분\
-\ne.g)PERCENT FEMALE   <-- PERCENT FEMALE을 float타입으로 출력\
-\ne.g)PERCENT FEMALE   <-- PERCENT FEMALE을 string타입으로 출력\
-\ne.g)COUNT FEMALE     <-- COUNT FEMALE을 Int타입으로 출력\n입력해주세요 : ").split(', ')
+        search_row_info = input("찾고싶은 Primary_key와 출력타입(기본은 int형)을 입력하십시오.").split(', ')
         print_type = ""
         try :
             print_type = search_row_info[1]
