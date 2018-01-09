@@ -6,7 +6,7 @@ blog.attrib["editor"] = "pycharm"
 subject = Element("subject")
 subject.text = "Why python?"
 author = Element("author")
-author.text = "Eric\n"
+author.text = "Eric\n  "
 Agenda = Element("Agenda")
 Agenda.text = ""
 
@@ -53,3 +53,6 @@ Agenda = tree.getroot()
 for j in Agenda:
     for child in j:
         print(child.text)
+
+print(blog.keys())
+print(blog.items())
