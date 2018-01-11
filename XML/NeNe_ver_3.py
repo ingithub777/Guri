@@ -3,21 +3,23 @@ import urllib.request
 import os
 from pandas import DataFrame
 import xml.etree.ElementTree as ET
+import time
 
 result = []
-dir_name = "V2_BigData"
+dir_name = "V3_BigData"
 dir_delimiter = "\\"
 nene_dir = "Nene_Data"
 nene_file = "nene"
 csv = ".csv"
 record_limit = 3
+time = time.strftime('%Y.%m.%d.%H.%M.%S', time.localtime(time.time()))
 
 def make_dir(index) :
     os.mkdir(dir_name + dir_delimiter + nene_dir+str(index))
     return None
 
-def make_nene(dir_index, file_index) :
-    destination_csv = dir_name + dir_delimiter + nene_dir + str(dir_index) + dir_delimiter + nene_file + str(file_index) + csv;
+def make_nene(dir_index, time) :
+    destination_csv = dir_name + dir_delimiter + nene_dir + str(dir_index) + dir_delimiter + nene_file + time + csv;
     nene_table.to_csv(destination_csv,encoding="cp949", mode='w', index=True)
     return None
 
@@ -46,7 +48,7 @@ try :
         if file_index % record_limit == 1 :
             make_dir(dir_index)
 
-        make_nene(dir_index, file_index)
+        make_nene(dir_index, time)
         file_index += 1
 
     with open(dir_name + dir_delimiter + "nene_index.txt", 'w') as file :
@@ -55,5 +57,5 @@ except FileNotFoundError :
     with open(dir_name + dir_delimiter + "nene_index.txt", 'w') as file :
         file.write('2')
     make_dir(1)
-    make_nene(1, 1)
+    make_nene(1, time)
 print("End")
