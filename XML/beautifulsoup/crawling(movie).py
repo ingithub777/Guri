@@ -1,39 +1,30 @@
 import urllib.request
-import csv
-import random
-from bs4 import BeautifulSoup
 from pandas import DataFrame
 from bs4 import BeautifulSoup
 
 html = urllib.request.urlopen('http://movie.naver.com/movie/sdb/rank/rmovie.nhn')
 soup = BeautifulSoup(html,'html.parser')
 
-# print(soup)
-# print(soup.prettify())
-
 tags = soup.findAll('div', attrs={'class':'tit3'})
 tags_range = soup.findAll('td', attrs={'class':'range ac'})
 
-# print(tags)
-# print(tags_range)
-# print(tags_sum)
-
-result = []
 name = []
-ranking = []
-ranking_list = []
-
 for tags_list in tags:
-    list = tags_list.text
-    movie_name = list
+    name_list = list(tags_list.strings)
+    movie_name = name_list[1]
     name.append([movie_name])
-for i in range(1,51):
-    ranking.append(str(i))
 
-for j in range(50):
-    result.append(ranking[j]+name[j])
+number = []
+for movie_number in tags_range:
+    movie_number = list(movie_number)
+    movie_range = movie_number[0]
+    number.append([movie_range])
 
-movie_table = DataFrame(result, columns = ('순위','영화명'))
+ranking_list = []
+for j in range(len(name)):
+    ranking_list.append([j+1]+name[j]+number[j])
+
+movie_table = DataFrame(ranking_list, columns = ('순위','영화명','변동폭'))
 movie_table.to_csv("movie.csv",encoding="cp949",mode='w',index=False)
 
 print("End")
