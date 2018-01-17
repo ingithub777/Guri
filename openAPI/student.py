@@ -15,7 +15,7 @@ while True:
             'address': input("주소는? : "),
             'lecture_information':
                 {
-                'past_lecture_number': input("과거수강횟수는? : "),
+                'past_lecture_subject': input("과거수강횟수는? : "),
                 'recent_lecture_subject':
                     [
                     {
@@ -38,4 +38,4 @@ while True:
         lecture_information = student_information[0].get('lecture_information')
         past_lecture_subject = student_information[0].get('lecture_information').get('past_lecture_subject')
 
-        print(student_ID,name,age,address,lecture_information,past_lecture_subject)
+        print(student_ID,name,age,address,lecture_information)
