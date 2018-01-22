@@ -3,8 +3,11 @@ import json
 student_result = []
 student_information = []
 
+address_file = 'ITT_Student.json'
+address = ''
+
 try:
-    with open('ITT_Student.json', encoding='utf8') as outfile:
+    with open(address_file, encoding='utf8') as outfile:
         json_object = json.load(outfile)
         json_string = json.dumps(json_object)
         json_big_data = json.loads(json_string)
@@ -12,7 +15,7 @@ except FileNotFoundError:
     file_maker = input('''경로에 파일이 없습니다. 어떻게 하시겠습니까?
     1. 경로를 입력합니다. 2. 기본 경로로 생성하겠습니다.
     메뉴를 선택하세요 : ''')
-    address_file = 'ITT_Student.json'
+    address_file = '\ITT_Student.json'
     if file_maker == '1':
         address = input("경로를 입력해주세요 : ")
         with open(address + address_file ,encoding='utf8') as outfile:
@@ -21,6 +24,7 @@ except FileNotFoundError:
             json_big_data = json.loads(json_string)
 
     elif file_maker == '2':
+        address_file = 'ITT_Student.json'
         address = ''
 
 while True:
@@ -34,8 +38,7 @@ while True:
     if student_management == '5':
         break
     elif student_management == '1':
-        student_information = [
-            {
+        student_information = {
             'student_ID': "ITT" + '{:0=3}'.format(len(student_information)+1),
             'name': input("성함은? : "),
             'age': input("나이는? : "),
@@ -55,27 +58,15 @@ while True:
                     ]
                 }
             }
-        ]
-        student_result = student_information
-        # if file_maker == '1':
-        #     with open(address + address_file , 'w', encoding='utf8') as outfile:
-        #         readable_result = json.dumps(student_result, indent=4, sort_keys=True, ensure_ascii=False)
-        #         outfile.write(readable_result)
-
-        with open(address + address_file, 'w', encoding='utf8') as outfile:
-            readable_result = json.dumps(student_result, indent=4, sort_keys=True, ensure_ascii=False)
-            outfile.write(readable_result)
-
-        # try:
-        #     if file_maker == '1':
-        #         with open(address + 'ITT_Student.json', 'w', encoding='utf8') as outfile:
-        #             readable_result = json.dumps(student_result, indent=4, sort_keys=True, ensure_ascii=False)
-        #             outfile.write(readable_result)
-        #     elif file_maker == '2':
-        #         with open('ITT_Student.json', 'w', encoding='utf8') as outfile:
-        #             readable_result = json.dumps(student_result, indent=4, sort_keys=True, ensure_ascii=False)
-        #             outfile.write(readable_result)
-        # except:
-        #   with open(address + address_file , 'w', encoding='utf8') as outfile:
-        #       readable_result = json.dumps(student_result, indent=4, sort_keys=True, ensure_ascii=False)
-        #       outfile.write(readable_result)
+        try:
+            student_result_1 = json_big_data
+            student_result.append(student_information)
+            student_result = student_result_1 + student_result
+            with open(address + address_file, 'w', encoding='utf8') as outfile:
+                readable_result = json.dumps(student_result, indent=4, sort_keys=True, ensure_ascii=False)
+                outfile.write(readable_result)
+        except:
+            student_result.append(student_information)
+            with open(address + address_file, 'w', encoding='utf8') as outfile:
+                readable_result = json.dumps(student_result, indent=4, sort_keys=True, ensure_ascii=False)
+                outfile.write(readable_result)

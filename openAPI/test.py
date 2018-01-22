@@ -1,7 +1,16 @@
 import json
 
-student_information = []
 student_result = []
+student_result_1 = []
+student_result_2 = []
+
+try:
+    with open('ITT_Student.json', encoding='utf8') as outfile:
+        json_object = json.load(outfile)
+        json_string = json.dumps(json_object)
+        json_big_data = json.loads(json_string)
+except FileNotFoundError:
+    pass
 
 while True:
     student_management = input("""<< json기반 주소록 관리 프로그램 >>
@@ -11,27 +20,19 @@ while True:
     if student_management == '5':
         break
     elif student_management == '1':
-        try:
-            with open('ITT_Student.json', 'r', encoding='utf8') as outfile:
-                readable_result = json.dumps(student_result, indent=4, sort_keys=True, ensure_ascii=False)
-            student_information = [
-                {
-                'student_ID': "ITT" + '{:0=3}'.format(len(student_information)+1),
-                'name': input("성함은? : ")}
-            ]
-            student_result.append(readable_result)
-            with open('ITT_Student.json', 'w', encoding='utf8') as outfile:
-                readable_result = json.dumps(student_result, indent=4, sort_keys=True, ensure_ascii=False)
-                outfile.write(student_result)
-                print('ITT_Student.json SAVED')
+        student_information = {
+            'name': input("성함은? : "),
+            }
+        with open('ITT_Student.json', 'w', encoding='utf8') as outfile:
+            student_result_2.append(student_information)
+            readable_result = json.dumps(student_result_2, indent=4, sort_keys=True, ensure_ascii=False)
+            outfile.write(readable_result)
 
-        except FileNotFoundError:
-            with open('ITT_Student.json', 'w', encoding='utf8') as outfile:
-                readable_result = json.dumps(student_result, indent=4, sort_keys=True, ensure_ascii=False)
-                outfile.write(readable_result)
-                print('파일 없다. 파일 생성!!!!!!!!! 가즈아!!!!!!!!!!!!')
-
-# with open('ITT_Student.json','w',encoding='utf8') as outfile:
-#     readable_result=json.dumps(student_result,indent=4,sort_keys=True,ensure_ascii=False)
-#     outfile.write(readable_result)
-#     print('ITT_Student.json SAVED')
+# try:
+#     student_result_1.append(json_big_data)
+#     student_result_2.append(student_information)
+#     student_result = student_result_1 + student_result_2
+#     with open('ITT_Student.json', 'w', encoding='utf8') as outfile:
+#         readable_result = json.dumps(student_result, indent=4, sort_keys=True, ensure_ascii=False)
+#         outfile.write(readable_result)
+# except: pass
