@@ -1,8 +1,7 @@
 import json
 
 student_result = []
-student_result_1 = []
-student_result_2 = []
+student_information = []
 
 try:
     with open('ITT_Student.json', encoding='utf8') as outfile:
@@ -20,19 +19,19 @@ while True:
     if student_management == '5':
         break
     elif student_management == '1':
-        student_information = {
+        student_information = [{
             'name': input("성함은? : "),
-            }
-        with open('ITT_Student.json', 'w', encoding='utf8') as outfile:
-            student_result_2.append(student_information)
-            readable_result = json.dumps(student_result_2, indent=4, sort_keys=True, ensure_ascii=False)
-            outfile.write(readable_result)
+            }]
+        print(student_information)
 
-# try:
-#     student_result_1.append(json_big_data)
-#     student_result_2.append(student_information)
-#     student_result = student_result_1 + student_result_2
-#     with open('ITT_Student.json', 'w', encoding='utf8') as outfile:
-#         readable_result = json.dumps(student_result, indent=4, sort_keys=True, ensure_ascii=False)
-#         outfile.write(readable_result)
-# except: pass
+        student_result.append(student_information) # 밖에서하면 append로 모든 자료를 불러오는건 가능하지 않으므로 안에서 돌려야한다.
+        print(student_result)
+
+# for student_result in student_information:
+with open('ITT_Student.json', 'w', encoding='utf8') as outfile:
+    readable_result = json.dumps(student_result, indent=4, sort_keys=True, ensure_ascii=False)
+    outfile.write(readable_result)
+
+# student_result_1.append(json_big_data)
+# student_result_2.append(student_information)
+# student_result = student_result_1 + student_result_2
