@@ -30,4 +30,3 @@ with open('test.json', 'w', encoding='utf8') as outfile:
     student_list += student_result
     readable_result = json.dumps(student_list, indent=4, sort_keys=True, ensure_ascii=False)
     outfile.write(readable_result)
-    print("고등어구이정식 : 8000원주세요.")
