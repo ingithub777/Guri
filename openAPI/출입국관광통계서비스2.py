@@ -1,7 +1,7 @@
 import urllib.request
 import datetime
 import json
-access_key = "VNH7QeBnhzad%2B45QS4DMbIvJp0s%2Fx2iY9vdKxLYJJJEHMFFHDLr8HZJHuPgfjWRTg22OklmBOuSWznNeJktguQ%3D%3D"
+access_key = "fgNUbFNWdrPsUqf6WsEPlsKYxDQ%2BgzRO2LIXFxVCeb7zMpjnDnIGiVINYnTenSQdMMseq9GIWW4Bkh5%2B7ZNXKA%3D%3D"
 
 def get_request_url(url):
     req = urllib.request.Request(url)
@@ -37,15 +37,13 @@ def getNatVisitor(yyyymm,nat_cd,ed_cd):
 def main():
     jsonResult = []
     # 중국 코드 112 일본 130 미국 275
-    national_code=""
+    national_code = ""
+    for national_code_list in range(100,621):
+        national_code_list
     ed_cd="E"
     nStartYear = 2016
     nEndYear = 2017
-
-    for national_code_list in range(100,621):
-        national_code = str(national_code_list)
-        print(national_code)
-
+    
     for year in range(nStartYear, nEndYear):
         for month in range(12,13):
             yyyymm ="{0}{1:0>2}".format(str(year),str(month))
