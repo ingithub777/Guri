@@ -6,19 +6,13 @@
 #     Count += 1
 
 Count = 0
+zero = 0
 
 while 1:
-    if Count != 0 :
+    if Count != 0 and zero == 0:
         print("0이 아니야!")
+        zero = 1
     Count += 1
-
-
-# count = 0
-# while 1:
-#     if count != 0:
-#         print("OK")
-
-
 
 
 
