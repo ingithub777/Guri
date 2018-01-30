@@ -2,6 +2,7 @@ import urllib.request
 import datetime
 import json
 import time
+import threading
 import random
 
 g_Radiator = False
@@ -96,13 +97,39 @@ def get_realtime_weather_info():
         retJson = json.dumps(jsonresult, indent=4, sort_keys=True, ensure_ascii=False)
         outfile.write(retJson)
 
+def update_scheduler():
+    global g_Balcony_Windows
+    while True:
+        if g_AI_Mode == False:
+            continue
+        else:
+            AI_time = time.localtime(time.time())
+            if AI_time[4] == 45 and AI_time[5] == 30:
+                with open('weather.json', encoding='utf8') as outfile:
+                    json_object = json.load(outfile)
+                    json_string = json.dumps(json_object)
+                    json_big_data = json.loads(json_string)
+
+                weather_div = json_big_data[0]
+                rain_AI_system = int(weather_div['fcstValue'])
+                if rain_AI_system == 0 and g_Balcony_Windows == False:
+                    print("창문을 열겠습니다.")
+                    g_Balcony_Windows = True
+                elif rain_AI_system > 0 and g_Balcony_Windows == True:
+                    print("비가와요! 문닫아요!")
+                    g_Balcony_Windows = False
+                time.sleep(1)
+t = threading.Thread(target=update_scheduler)
+t.daemon = True
+t.start()
+
 def smart_mode():
     global g_AI_Mode
     global g_Balcony_Windows
     print("\n1. 인공지능 모드 조회")
     print("2. 인공지능 모드 상태변경")
     print("3. 실시간 기상정보 Update")
-    print("4. 강수예보 시뮬레이션")
+    print("4. 시뮬레이션 모드")
     menu_num = int(input("메뉴를 선택하세요: "))
 
     if menu_num == 1:
@@ -112,20 +139,45 @@ def smart_mode():
     elif menu_num == 2:
         g_AI_Mode = not g_AI_Mode
         print("현재인공지능 모드: ", end='')
-        if g_AI_Mode == True: print("작동")
-
+        if g_AI_Mode == True:
+            print("작동")
+            update_scheduler()
         else: print("중지")
 
     elif menu_num == 3:
         get_realtime_weather_info()
 
     elif menu_num == 4:
-        RN1 = random.randint(0, 3)
-        if RN1 == 0:
-            g_Balcony_Windows = True
-            print("창문을 열겠습니다.")
-        else:
-            print("비가와요! 문닫아요! 창문을 닫습니다.")
+        simulation_number = int(input("""1. 비오는날 시뮬레이션 (발코니창 제어)
+2. 습한날 시뮬레이션 (제습기 제어)
+3. 건조한날 시뮬레이션 (가습기 제어)
+4. 상쾌한날 시뮬레이션 (제습기/가습기 제어)
+    입력하세요: """))
+        if simulation_number == 1:
+            real_weather_list = []
+            real_weather = {"baseDate": 20180129,
+                            "baseTime": 1430,
+                            "category": "RN1",
+                            "fcstDate": 20180129,
+                            "fcstTime": time.strftime("%H%M", time.localtime(time.time())),
+                            "fcstValue": random.randint(1, 100), # 변경가능 0으로 강수량 없음으로
+                            "nx": 89,
+                            "ny": 91
+                            }
+            real_weather_list.append(real_weather)
+            weather_div = real_weather_list[0]
+            rain_AI_system = int(weather_div['fcstValue'])
+            if rain_AI_system == 0 and g_Balcony_Windows == False:
+                print("창문을 열겠습니다.")
+                g_Balcony_Windows = True
+            elif rain_AI_system > 0 and g_Balcony_Windows == True:
+                print("강수량 :",rain_AI_system," 비가와요! 문닫아요!")
+                g_Balcony_Windows = False
+            with open('weather.json', 'w', encoding='utf8') as outfile:
+                readable_result = json.dumps(real_weather_list, indent=4, sort_keys=True, ensure_ascii=False)
+                outfile.write(readable_result)
+
+        # elif simulation_number == 2:
 
 
 def control_device():
@@ -137,17 +189,33 @@ def control_device():
     menu_num = int(input("번호를 입력하세요: "))
 
     if menu_num == 1:
-        if g_Radiator == True: g_Radiator = False
-        elif g_Radiator == False: g_Radiator = True
-
-        if g_Gas_Valve == True: g_Gas_Valve = False
-        elif g_Gas_Valve == False: g_Gas_Valve = True
-
-        if g_Balcony_Windows == True: g_Balcony_Windows = False
-        elif g_Balcony_Windows == False: g_Balcony_Windows = True
-
-        if g_Door == True: g_Door = False
-        elif g_Door == False: g_Door = True
+        if g_Radiator == True:
+            g_Radiator = False
+            print("난방기 정지")
+        elif g_Radiator == False:
+            g_Radiator = True
+            print("난방기 작동")
+    elif menu_num == 2:
+        if g_Gas_Valve == True:
+            g_Gas_Valve = False
+            print("가스밸브 잠금")
+        elif g_Gas_Valve == False:
+            g_Gas_Valve = True
+            print("가스밸브 오픈")
+    elif menu_num == 3:
+        if g_Balcony_Windows == True:
+            g_Balcony_Windows = False
+            print("창문 닫음")
+        elif g_Balcony_Windows == False:
+            g_Balcony_Windows = True
+            print("창문 개방")
+    elif menu_num == 4:
+        if g_Door == True:
+            g_Door = False
+            print("출입문 닫음")
+        elif g_Door == False:
+            g_Door = True
+            print("출입문 개방")
 
 while True:
     print_main_menu()

@@ -1,5 +1,6 @@
 import threading
 import time
+import json
 
 g_Balcony_Windows = False
 g_AI_Mode = False
@@ -10,8 +11,11 @@ def update_scheduler():
         if g_AI_Mode == False:
             continue
         else:
-            time.sleep(5)
-            g_Balcony_Windows = not g_Balcony_Windows
+            AI_time = time.localtime(time.time())
+            if AI_time[4] == 13 and AI_time[5] == 10:
+                g_Balcony_Windows = not g_Balcony_Windows
+                print("발코니를 열겠습니다.")
+                time.sleep(1)
 
 t = threading.Thread(target=update_scheduler)
 t.daemon = True
@@ -34,3 +38,7 @@ while True:
         if g_AI_Mode==True: print("작동")
         else: print("정지")
     else: break
+
+# AI_time = time.localtime(time.time())
+# if AI_time[4] == 39:
+#     print("OK")

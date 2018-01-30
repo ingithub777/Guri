@@ -38,8 +38,11 @@ def main():
     jsonresult = []
     basedate = time.strftime("%Y%m%d", time.localtime(time.time()))
     basetime = time.strftime("%H%M", time.localtime(time.time()))
-    basetime = int(basetime) - 100
+    print(basetime)
+    basetime = int(basetime) - 30
     basetime = str(basetime)
+    basetime.zfill(4)
+    print(basetime)
     nx = "89"
     ny = "91"
 
