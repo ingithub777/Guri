@@ -182,18 +182,21 @@ def smart_mode():
 
         elif simulation_number == 2:
             global g_humidity
+            # basedate = time.strftime("%Y%m%d", time.localtime(time.time()))
+            # basetime = time.strftime("%H%M", time.localtime(time.time()))
+            # basetime = int(basetime) - 100
+            # basetime = str(basetime)
+            # basetime = basetime.zfill(4)
             real_weather_list = []
-            real_weather = {"baseDate": 20180131,
-                            "baseTime": 1430,
-                            "category": "REH",
-                            "fcstDate": 20180131,
-                            "fcstTime": time.strftime("%H%M", time.localtime(time.time())),
-                            "fcstValue": random.randint(1, 100), # 범위 변경가능
-                            "nx": 89,
-                            "ny": 91
-                            }
-            real_weather_list.append(real_weather)
+            with open('20180131_1615_날씨정보.json', encoding='utf8') as outfile: #json파일 실제시간으로 수정필요
+                json_object = json.load(outfile)
+                json_string = json.dumps(json_object)
+                json_big_data = json.loads(json_string)
+            real_weather_list.append(json_big_data)
             weather_div = real_weather_list[0]
+            if weather_div[0]['category'] == "REH":
+                print(weather_div[0]['fcstValue'])
+                print("OK")
             humidity_AI_system = int(weather_div['fcstValue'])
             print(humidity_AI_system)
             if humidity_AI_system > 60 and g_humidity == False:
@@ -332,5 +335,3 @@ while True:
     elif(menu_num == 3):
         smart_mode()
     elif(menu_num == 0): break
-
-# 습도를 가져와서 장비(제습기,가습기)제어 해보기
