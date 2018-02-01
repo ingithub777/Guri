@@ -31,12 +31,12 @@ def check_device_status():
     elif(g_Gas_Valve == False): print("잠김")
 
     print("발코니 창문 상태: ",end='')
-    if(g_Balcony_Windows == True): print("개방")
-    elif(g_Balcony_Windows == False): print("닫음")
+    if(g_Balcony_Windows == True): print("Open")
+    elif(g_Balcony_Windows == False): print("Close")
 
     print("출입문 상태: ",end='')
-    if(g_Door == True): print("개방")
-    elif(g_Door == False): print("다음")
+    if(g_Door == True): print("Open")
+    elif(g_Door == False): print("Close")
 
     print("제습기 상태: ",end='')
     if(g_humidity == True): print("ON")
@@ -61,19 +61,19 @@ def get_request_url(url):
     try:
         response = urllib.request.urlopen(req)
         if response.getcode() == 200:
-            print("[%s] Url Request Success" % datetime.datetime.now())
+            print("\n[%s] Url Request Success" % datetime.datetime.now())
             return response.read().decode('utf-8')
     except Exception as e:
         print(e)
         print("[%s] Error for URL:%s" % (datetime.datetime.now(), url))
         return None
 
-def getweather(base_date,base_time,nx,ny):
+def getweather(basedate,basetime,nx,ny):
     end_point="http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastTimeData"
 
     parameters = "?_type=json&serviceKey="+access_key+"&numOfRows=100"
-    parameters+="&base_date="+base_date
-    parameters+="&base_time="+base_time
+    parameters+="&base_date="+basedate
+    parameters+="&base_time="+basetime
     parameters+="&nx="+nx
     parameters+="&ny="+ny
 
@@ -104,30 +104,69 @@ def get_realtime_weather_info():
         outfile.write(retJson)
 
 def update_scheduler():
+    global g_humidity
     global g_Balcony_Windows
+    global g_humidifier
     while True:
         if g_AI_Mode == False:
             continue
         else:
             AI_time = time.localtime(time.time())
-            if AI_time[4] == 45 and AI_time[5] == 30:
-                with open('weather.json', encoding='utf8') as outfile:
-                    json_object = json.load(outfile)
-                    json_string = json.dumps(json_object)
-                    json_big_data = json.loads(json_string)
+            if AI_time[4] == 47 and AI_time[5] == 10 :
+                REH_number = []
+                RN1_number = []
+                basedate = time.strftime("%Y%m%d", time.localtime(time.time()))
+                basetime = time.strftime("%H%M", time.localtime(time.time()))
+                basetime = int(basetime) - 100
+                basetime = str(basetime)
+                basetime = basetime.zfill(4)
+                nx = "89"
+                ny = "91"
 
-                weather_div = json_big_data[0]
-                rain_AI_system = int(weather_div['fcstValue'])
-                if rain_AI_system == 0 and g_Balcony_Windows == False:
-                    print("창문을 열겠습니다.")
-                    g_Balcony_Windows = True
-                elif rain_AI_system > 0 and g_Balcony_Windows == True:
-                    print("비가와요! 문닫아요!")
+                jsondata = getweather(basedate, basetime, nx, ny)
+                if (jsondata['response']['header']['resultMsg'] == 'OK'):
+                    jsonresult = jsondata['response']['body']['items']['item']
+                    AI_div = jsonresult
+                    AI_number_line = len(AI_div)
+                    AI_div = jsonresult
+                    AI_number_line = len(AI_div)
+                    for i in range(AI_number_line):
+                        if 'RN1' in AI_div[i]['category']:
+                            RN1_number_list = AI_div[i]['fcstValue']
+                            RN1_number.append(RN1_number_list)
+                    for i in range(AI_number_line):
+                        if 'REH' in AI_div[i]['category']:
+                            REH_number_list = AI_div[i]['fcstValue']
+                            REH_number.append(REH_number_list)
+
+                humidifier_AI_system = REH_number[0]
+                humidity_AI_system = REH_number[0]
+                Balcony_Windows_AI_system = RN1_number[0]
+                if Balcony_Windows_AI_system > 0 and g_Balcony_Windows == True:
+                    print("강수량:",Balcony_Windows_AI_system,"% 창문을 닫겠습니다.")
                     g_Balcony_Windows = False
+                elif Balcony_Windows_AI_system == 0 and g_Balcony_Windows == False:
+                    print("강수량:",Balcony_Windows_AI_system,"% 창문을 열겠습니다.")
+                    g_Balcony_Windows = True
+                if humidity_AI_system > 60 and g_humidity == False:
+                    print("현재 습도:",humidity_AI_system,"% 제습기를 작동하겠습니다.")
+                    g_humidity = True
+                if humidity_AI_system < 40 and g_humidity == True:
+                    print("현재 습도:",humidity_AI_system,"% 제습기를 정지하겠습니다.")
+                    g_humidity = False
+                if humidity_AI_system in range(40,60):
+                    print("현재 습도:",humidity_AI_system,'%',"현 상태 유지하겠습니다.")
+                    g_humidity = False
+                if humidifier_AI_system > 60 and g_humidifier == True:
+                    print("현재 습도:",humidifier_AI_system,"% 가습기를 정지하겠습니다.")
+                    g_humidifier = False
+                if humidifier_AI_system < 40 and g_humidifier == False:
+                    print("현재 습도:",humidifier_AI_system,"% 가습기를 작동하겠습니다.")
+                    g_humidifier = True
+                if humidifier_AI_system in range(40,60):
+                    print("현재 습도:",humidifier_AI_system,'%',"현 상태 유지하겠습니다.")
+                    g_humidifier = False
                 time.sleep(1)
-t = threading.Thread(target=update_scheduler)
-t.daemon = True
-t.start()
 
 def smart_mode():
     global g_AI_Mode
@@ -147,7 +186,6 @@ def smart_mode():
         print("현재인공지능 모드: ", end='')
         if g_AI_Mode == True:
             print("작동")
-            update_scheduler()
         else: print("중지")
 
     elif menu_num == 3:
@@ -321,6 +359,10 @@ def control_device():
             g_humidifier = True
             print("가습기 ON")
 
+t = threading.Thread(target=update_scheduler)
+t.daemon = True
+t.start()
+
 while True:
     print_main_menu()
     menu_num = int(input("메뉴를 선택하세요: "))
@@ -332,5 +374,3 @@ while True:
     elif(menu_num == 3):
         smart_mode()
     elif(menu_num == 0): break
-
-# 습도를 가져와서 장비(제습기,가습기)제어 해보기

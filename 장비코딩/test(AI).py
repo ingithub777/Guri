@@ -12,7 +12,7 @@ def update_scheduler():
             continue
         else:
             AI_time = time.localtime(time.time())
-            if AI_time[4] == 13 and AI_time[5] == 10:
+            if AI_time[4] == 0 and AI_time[5] == 50:
                 g_Balcony_Windows = not g_Balcony_Windows
                 print("발코니를 열겠습니다.")
                 time.sleep(1)
