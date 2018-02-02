@@ -224,7 +224,6 @@ def AI_start_system():
         g_Balcony_Windows = False
     elif Balcony_Windows_AI_system == 0 and g_Balcony_Windows == False:
         print("강수량:",Balcony_Windows_AI_system,"%")
-        # g_Balcony_Windows = True # 창문여는것은 보류
     if humidity_AI_system > g_Max_Acceptable_humidity_level and g_humidity == False:
         print("현재 습도:",humidity_AI_system,"% 제습기를 작동하겠습니다.")
         g_humidity = True
