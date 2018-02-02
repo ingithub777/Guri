@@ -18,6 +18,76 @@ g_Min_Acceptable_humidity_level = 50
 
 access_key = "fgNUbFNWdrPsUqf6WsEPlsKYxDQ%2BgzRO2LIXFxVCeb7zMpjnDnIGiVINYnTenSQdMMseq9GIWW4Bkh5%2B7ZNXKA%3D%3D"
 
+
+def print_main_menu():
+    print("\n1. 장비상태 확인")
+    print("2. 장비제어")
+    print("3. 스마트모드")
+    print("4. 시뮬레이션모드")
+    print("0. 프로그램 종료")
+
+
+# def print_device_status(device_name,devcie_status):
+#     print("%s 상태: "%device_name, end="")
+#     if devcie_status == True : print("작동")
+#     else: print("정지")
+#
+# def check_device_status():
+#     print_device_status('\n난방기',g_Radiator)
+#     print_device_status('가스밸브', g_Gas_Valve)
+#     print_device_status('발코니(베란다)', g_Balcony_Windows)
+#     print_device_status('출입문', g_Door)
+#     print_device_status('제습기',g_humidity)
+#     print_device_status('가습기',g_humidifier)
+
+def check_device_status():
+    print("\n난방기 상태: ", end='')
+    if (g_Radiator == True):
+        print("작동")
+    elif (g_Radiator == False):
+        print("정지")
+
+    print("가스밸브 상태: ", end='')
+    if (g_Gas_Valve == True):
+        print("열림")
+    elif (g_Gas_Valve == False):
+        print("닫힘")
+
+    print("발코니 창문 상태: ", end='')
+    if (g_Balcony_Windows == True):
+        print("열림")
+    elif (g_Balcony_Windows == False):
+        print("닫힘")
+
+    print("출입문 상태: ", end='')
+    if (g_Door == True):
+        print("열림")
+    elif (g_Door == False):
+        print("닫힘")
+
+    print("제습기 상태: ", end='')
+    if (g_humidity == True):
+        print("작동")
+    elif (g_humidity == False):
+        print("정지")
+
+    print("가습기 상태: ", end='')
+    if (g_humidifier == True):
+        print("작동")
+    elif (g_humidifier == False):
+        print("정지")
+
+
+def print_device_menu():
+    print("상태 변경할 기기를 선택하세요. ")
+    print("1. 난방기")
+    print("2. 가스밸브")
+    print("3. 발코니(배란다) 창문")
+    print("4. 출입문")
+    print("5. 제습기")
+    print("6. 가습기")
+
+
 def get_request_url(url):
     req = urllib.request.Request(url)
 
@@ -31,14 +101,15 @@ def get_request_url(url):
         print("[%s] Error for URL:%s" % (datetime.datetime.now(), url))
         return None
 
-def getweather(basedate,basetime,nx,ny):
-    end_point="http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastTimeData"
 
-    parameters = "?_type=json&serviceKey="+access_key+"&numOfRows=100"
-    parameters+="&base_date="+basedate
-    parameters+="&base_time="+basetime
-    parameters+="&nx="+nx
-    parameters+="&ny="+ny
+def getweather(basedate, basetime, nx, ny):
+    end_point = "http://newsky2.kma.go.kr/service/SecndSrtpdFrcstInfoService2/ForecastTimeData"
+
+    parameters = "?_type=json&serviceKey=" + access_key + "&numOfRows=100"
+    parameters += "&base_date=" + basedate
+    parameters += "&base_time=" + basetime
+    parameters += "&nx=" + nx
+    parameters += "&ny=" + ny
 
     url = end_point + parameters
     retData = get_request_url(url)
@@ -46,6 +117,7 @@ def getweather(basedate,basetime,nx,ny):
         return None
     else:
         return json.loads(retData)
+
 
 def get_realtime_weather_info():
     jsonresult = []
@@ -61,44 +133,51 @@ def get_realtime_weather_info():
     if (jsondata['response']['header']['resultMsg'] == 'OK'):
         jsonresult = jsondata['response']['body']['items']['item']
 
-    print("%s_%s_날씨정보"%(basedate, basetime))
+    print("%s_%s_날씨정보" % (basedate, basetime))
     with open('%s_%s_날씨정보.json' % (basedate, basetime), 'w', encoding='utf8') as outfile:
         retJson = json.dumps(jsonresult, indent=4, sort_keys=True, ensure_ascii=False)
         outfile.write(retJson)
 
-def print_main_menu():
-    print("\n1. 장비상태 확인")
-    print("2. 장비제어")
-    print("3. 스마트모드")
-    print("4. 시뮬레이션모드")
-    print("0. 프로그램 종료")
 
-def print_device_status(device_name,devcie_status):
-    print("%s 상태: "%device_name, end="")
-    if devcie_status == True : print("작동")
-    else: print("정지")
+def update_scheduler():
+    global g_humidity
+    global g_Balcony_Windows
+    global g_humidifier
+    while True:
+        if g_AI_Mode == False:
+            continue
+        else:
+            AI_time = time.localtime(time.time())
+            if AI_time[4] == 45 and AI_time[5] == 59:
+                AI_start_system()
 
-def print_device_status_2(device_name,devcie_status):
-    print("%s 상태: "%device_name, end="")
-    if devcie_status == True : print("열림")
-    else: print("닫힘")
 
-def check_device_status():
-    print_device_status('\n난방기',g_Radiator)
-    print_device_status_2('가스밸브', g_Gas_Valve)
-    print_device_status_2('발코니(베란다)', g_Balcony_Windows)
-    print_device_status_2('출입문', g_Door)
-    print_device_status('제습기',g_humidity)
-    print_device_status('가습기',g_humidifier)
+def smart_mode():
+    global g_AI_Mode
+    global g_Balcony_Windows
+    print("\n1. 인공지능 모드 조회")
+    print("2. 인공지능 모드 상태변경")
+    print("3. 실시간 기상정보 업데이트")
+    menu_num = int(input("메뉴를 선택하세요: "))
 
-def print_device_menu():
-    print("상태 변경할 기기를 선택하세요. ")
-    print("1. 난방기")
-    print("2. 가스밸브")
-    print("3. 발코니(배란다) 창문")
-    print("4. 출입문")
-    print("5. 제습기")
-    print("6. 가습기")
+    if menu_num == 1:
+        print("현재 인공지능 모드: ", end='')
+        if g_AI_Mode == True:
+            print("작동")
+        else:
+            print("정지")
+    elif menu_num == 2:
+        g_AI_Mode = not g_AI_Mode
+        print("현재인공지능 모드: ", end='')
+        AI_start_system()
+        if g_AI_Mode == True:
+            print("작동")
+        else:
+            print("중지")
+
+    elif menu_num == 3:
+        get_realtime_weather_info()
+
 
 def control_device():
     global g_Radiator
@@ -153,40 +232,6 @@ def control_device():
             g_humidifier = True
             print("가습기 작동")
 
-def update_scheduler():
-    global g_humidity
-    global g_Balcony_Windows
-    global g_humidifier
-    while True:
-        if g_AI_Mode == False:
-            continue
-        else:
-            AI_time = time.localtime(time.time())
-            if AI_time[4] == 45 and AI_time[5] == 59 :
-                AI_start_system()
-
-def smart_mode():
-    global g_AI_Mode
-    global g_Balcony_Windows
-    print("\n1. 인공지능 모드 조회")
-    print("2. 인공지능 모드 상태변경")
-    print("3. 실시간 기상정보 업데이트")
-    menu_num = int(input("메뉴를 선택하세요: "))
-
-    if menu_num == 1:
-        print("현재 인공지능 모드: ", end='')
-        if g_AI_Mode == True: print("작동")
-        else: print("정지")
-    elif menu_num == 2:
-        g_AI_Mode = not g_AI_Mode
-        print("현재인공지능 모드: ", end='')
-        AI_start_system()
-        if g_AI_Mode == True:
-            print("작동")
-        else: print("중지")
-
-    elif menu_num == 3:
-        get_realtime_weather_info()
 
 def AI_start_system():
     global g_humidity
@@ -220,30 +265,31 @@ def AI_start_system():
     humidity_AI_system = REH_number[0]
     Balcony_Windows_AI_system = RN1_number[0]
     if Balcony_Windows_AI_system > 0 and g_Balcony_Windows == True:
-        print("강수량:",Balcony_Windows_AI_system,"% 창문을 닫겠습니다.")
+        print("강수량:", Balcony_Windows_AI_system, "% 창문을 닫겠습니다.")
         g_Balcony_Windows = False
     elif Balcony_Windows_AI_system == 0 and g_Balcony_Windows == False:
-        print("강수량:",Balcony_Windows_AI_system,"%")
+        print("강수량:", Balcony_Windows_AI_system, "%")
         # g_Balcony_Windows = True # 창문여는것은 보류
     if humidity_AI_system > g_Max_Acceptable_humidity_level and g_humidity == False:
-        print("현재 습도:",humidity_AI_system,"% 제습기를 작동하겠습니다.")
+        print("현재 습도:", humidity_AI_system, "% 제습기를 작동하겠습니다.")
         g_humidity = True
     if humidity_AI_system < g_Min_Acceptable_humidity_level and g_humidity == True:
-        print("현재 습도:",humidity_AI_system,"% 제습기를 정지하겠습니다.")
+        print("현재 습도:", humidity_AI_system, "% 제습기를 정지하겠습니다.")
         g_humidity = False
-    if humidity_AI_system in range(g_Min_Acceptable_humidity_level,g_Max_Acceptable_humidity_level):
-        print("현재 습도:",humidity_AI_system,'%',"현 상태 유지하겠습니다.")
+    if humidity_AI_system in range(g_Min_Acceptable_humidity_level, g_Max_Acceptable_humidity_level):
+        print("현재 습도:", humidity_AI_system, '%', "현 상태 유지하겠습니다.")
         g_humidity = False
     if humidifier_AI_system > g_Max_Acceptable_humidity_level and g_humidifier == True:
-        print("현재 습도:",humidifier_AI_system,"% 가습기를 정지하겠습니다.")
+        print("현재 습도:", humidifier_AI_system, "% 가습기를 정지하겠습니다.")
         g_humidifier = False
     if humidifier_AI_system < g_Min_Acceptable_humidity_level and g_humidifier == False:
-        print("현재 습도:",humidifier_AI_system,"% 가습기를 작동하겠습니다.")
+        print("현재 습도:", humidifier_AI_system, "% 가습기를 작동하겠습니다.")
         g_humidifier = True
-    if humidifier_AI_system in range(g_Min_Acceptable_humidity_level,g_Max_Acceptable_humidity_level):
-        print("현재 습도:",humidifier_AI_system,'%',"현 상태 유지하겠습니다.")
+    if humidifier_AI_system in range(g_Min_Acceptable_humidity_level, g_Max_Acceptable_humidity_level):
+        print("현재 습도:", humidifier_AI_system, '%', "현 상태 유지하겠습니다.")
         g_humidifier = False
     time.sleep(1)
+
 
 def simulation_mode():
     global g_Balcony_Windows
@@ -294,7 +340,7 @@ def simulation_mode():
         elif humidity_AI_system < g_Min_Acceptable_humidity_level and g_humidity == True:
             print("습도 :", humidity_AI_system, "%", "입니다. 제습기를 정지합니다.")
             g_humidity = False
-        elif humidity_AI_system in range(g_Min_Acceptable_humidity_level, g_Max_Acceptable_humidity_level+1):
+        elif humidity_AI_system in range(g_Min_Acceptable_humidity_level, g_Max_Acceptable_humidity_level + 1):
             print("습도 :", humidity_AI_system, "%", "아주 좋습니다. 유지하세요.")
         with open('weather.json', 'w', encoding='utf8') as outfile:
             readable_result = json.dumps(real_weather_list, indent=4, sort_keys=True, ensure_ascii=False)
@@ -320,7 +366,7 @@ def simulation_mode():
         elif humidifier_AI_system < g_Min_Acceptable_humidity_level and g_humidifier == False:
             print("습도 :", humidifier_AI_system, "%", "입니다. 가습기를 작동합니다.")
             g_humidifier = True
-        elif humidifier_AI_system in range(g_Min_Acceptable_humidity_level, g_Max_Acceptable_humidity_level+1):
+        elif humidifier_AI_system in range(g_Min_Acceptable_humidity_level, g_Max_Acceptable_humidity_level + 1):
             print("습도 :", humidifier_AI_system, "%", "아주 좋습니다. 유지하세요.")
         with open('weather.json', 'w', encoding='utf8') as outfile:
             readable_result = json.dumps(real_weather_list, indent=4, sort_keys=True, ensure_ascii=False)
@@ -332,21 +378,25 @@ def simulation_mode():
                         "category": "REH",
                         "fcstDate": 20180131,
                         "fcstTime": time.strftime("%H%M", time.localtime(time.time())),
-                        "fcstValue": random.randint(g_Min_Acceptable_humidity_level, g_Max_Acceptable_humidity_level+1),  # 범위 변경가능
+                        "fcstValue": random.randint(g_Min_Acceptable_humidity_level,
+                                                    g_Max_Acceptable_humidity_level + 1),  # 범위 변경가능
                         "nx": 89,
                         "ny": 91
                         }
         real_weather_list.append(real_weather)
         weather_div = real_weather_list[0]
         nice_AI_system = int(weather_div['fcstValue'])
-        if nice_AI_system in range(g_Min_Acceptable_humidity_level, g_Max_Acceptable_humidity_level+1) and g_humidifier == True and g_humidity == True:
+        if nice_AI_system in range(g_Min_Acceptable_humidity_level,
+                                   g_Max_Acceptable_humidity_level + 1) and g_humidifier == True and g_humidity == True:
             g_humidifier = False
             g_humidity = False
             print("가습기, 제습기 정지합니다.")
-        elif nice_AI_system in range(g_Min_Acceptable_humidity_level, g_Max_Acceptable_humidity_level+1) and g_humidifier == True and g_humidity == False:
+        elif nice_AI_system in range(g_Min_Acceptable_humidity_level,
+                                     g_Max_Acceptable_humidity_level + 1) and g_humidifier == True and g_humidity == False:
             g_humidifier = False
             print("가습기를 정지합니다.")
-        elif nice_AI_system in range(g_Min_Acceptable_humidity_level, g_Max_Acceptable_humidity_level+1) and g_humidifier == False and g_humidity == True:
+        elif nice_AI_system in range(g_Min_Acceptable_humidity_level,
+                                     g_Max_Acceptable_humidity_level + 1) and g_humidifier == False and g_humidity == True:
             g_humidity = False
             print("제습기를 정지합니다.")
         else:
@@ -356,6 +406,7 @@ def simulation_mode():
             readable_result = json.dumps(real_weather_list, indent=4, sort_keys=True, ensure_ascii=False)
             outfile.write(readable_result)
 
+
 t = threading.Thread(target=update_scheduler)
 t.daemon = True
 t.start()
@@ -364,12 +415,13 @@ while True:
     print_main_menu()
     menu_num = int(input("메뉴를 선택하세요: "))
 
-    if(menu_num == 1):
+    if (menu_num == 1):
         check_device_status()
-    elif(menu_num == 2):
+    elif (menu_num == 2):
         control_device()
-    elif(menu_num == 3):
+    elif (menu_num == 3):
         smart_mode()
-    elif(menu_num == 4):
+    elif (menu_num == 4):
         simulation_mode()
-    elif(menu_num == 0): break
+    elif (menu_num == 0):
+        break
