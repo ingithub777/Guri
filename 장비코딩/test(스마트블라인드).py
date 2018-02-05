@@ -3,7 +3,8 @@ import time
 import datetime
 import urllib.request
 
-REH_number = []
+T1H_number = []
+SKY_number = []
 real_weather_list = []
 
 access_key = "fgNUbFNWdrPsUqf6WsEPlsKYxDQ%2BgzRO2LIXFxVCeb7zMpjnDnIGiVINYnTenSQdMMseq9GIWW4Bkh5%2B7ZNXKA%3D%3D"
@@ -38,7 +39,6 @@ def getweather(basedate,basetime,nx,ny):
         return json.loads(retData)
 
 def get_realtime_weather_info():
-    jsonresult = []
     basedate = time.strftime("%Y%m%d", time.localtime(time.time()))
     basetime = time.strftime("%H%M", time.localtime(time.time()))
     basetime = int(basetime) - 100
@@ -51,11 +51,15 @@ def get_realtime_weather_info():
     if (jsondata['response']['header']['resultMsg'] == 'OK'):
         jsonresult = jsondata['response']['body']['items']['item']
         weather_div = jsonresult
-        REH_number_line = len(weather_div)
-        for i in range(REH_number_line):
-            if 'REH' in weather_div[i]['category']:
-                REH_number_list = weather_div[i]['fcstValue']
-                REH_number.append(REH_number_list)
-        print(REH_number[0])
+        T1H_number_line = len(weather_div)
+        for i in range(T1H_number_line):
+            if 'T1H' in weather_div[i]['category']:
+                T1H_number_list = weather_div[i]['fcstValue']
+                T1H_number.append(T1H_number_list)
+            if 'SKY' in weather_div[i]['category']:
+                SKY_number_list = weather_div[i]['fcstValue']
+                SKY_number.append(SKY_number_list)
+
+        print(T1H_number[0],SKY_number[0])
 
 get_realtime_weather_info()
