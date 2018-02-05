@@ -46,3 +46,39 @@ for i in a:
     i = int(i)
     i = '*'*int(a)
     print(i)
+
+난이도
+하
+
+재귀호출로
+1
+부터
+10
+까지
+더하는
+프로그램
+만들기
+
+
+def sum(num):
+    pass
+
+
+num = 1
+
+print(sum(num))
+
+sum
+함수
+안에
+내용을
+채워넣으세요.그
+이상의
+함수
+사용
+불가, for문
+while문
+등의
+반복문
+사용
+불가능
