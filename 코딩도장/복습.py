@@ -104,10 +104,16 @@
 data= [1,3,5,7,9,11,13,15,17,19]
 
 find_num = 2
+a = 0
 
 for i in range(len(data)):
-    if find_num == data[i]:
+    if find_num == data[i] and a == 0:
         print("찾았다!")
+        a = 1
         break
-    elif find_num != data[i]:
-        print("%d을(를) 찾을 수 없습니다." % find_num)
+if a != 1:
+    print("%d을(를) 찾을 수 없습니다." % find_num)
+
+    # elif find_num not in data:
+    #     print("%d을(를) 찾을 수 없습니다." % find_num)
+    #     break
