@@ -101,19 +101,37 @@
 # ex) (find_num이 10이라고 가정)
 # 10을(를) 찾을 수 없습니다.
 
-data= [1,3,5,7,9,11,13,15,17,19]
-
-find_num = 2
-a = 0
-
-for i in range(len(data)):
-    if find_num == data[i] and a == 0:
-        print("찾았다!")
-        a = 1
-        break
-if a != 1:
-    print("%d을(를) 찾을 수 없습니다." % find_num)
+# data= [1,3,5,7,9,11,13,15,17,19]
+#
+# find_num = 2
+# a = 0
+#
+# for i in range(len(data)):
+#     if find_num == data[i] and a == 0:
+#         print("찾았다!")
+#         a = 1
+#         break
+# if a != 1:
+#     print("%d을(를) 찾을 수 없습니다." % find_num)
 
     # elif find_num not in data:
     #     print("%d을(를) 찾을 수 없습니다." % find_num)
     #     break
+
+# 속이 빈 삼각형을 그리세요
+# (단 사용자에게 높이를 입력받아서 결과를 출력해야 함)
+# ex) 높이:5
+#
+#     *
+#    * *
+#   *   *
+#  *     *
+# *********
+
+# a = int(input("숫자를 입력하세요: "))
+# for j in range(a):
+#     i = '*'
+#     if j == 0 or j == a-1:
+#         print(i*a)
+#     else:
+#         print(i+" "*(a-2)+i)
