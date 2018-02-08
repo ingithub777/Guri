@@ -127,37 +127,42 @@
 #   *   *
 #  *     *
 # *********
+#
+# while 1:
+#     a = int(input("숫자를 입력하세요: "))
+#     c = 2
+#     b = 1
+#     for j in range(a):
+#         s = '*'
+#         if j == 0:
+#             print(" "*(a-1)+s)
+#         elif j != 0 and j != a-1:
+#             for i in range(a-2):
+#                 if i == 0:
+#                     print(" "*(a-c)+s+" "*(b)+s+" "*(a-2))
+#                     b += 2
+#                     c += 1
+#         elif j == a-1:
+#             print(s*(a*2-1))
 
-while 1:
-    a = int(input("숫자를 입력하세요: "))
-    c = 2
-    b = 1
-    for j in range(a):
-        s = '*'
-        if j == 0:
-            print(" "*(a-1)+s)
-        if j != 0 and j != a-1:
-            for i in range(a-2):
-                if i == 0:
-                    print(" "*(a-c)+s+" "*(b)+s+" "*(a-2))
-                    b += 2
-                    c += 1
-        if j == a-1:
-            print(s*(a*2-1))
+# 사용 제한 및 금지 사항
+# 1.인덱스 사용의 제한(금지는 아니나 다음과 같은 사용에 제한을 둠.)
+# 1-1. [:] -> 콜론 사용 불가능
+# 1-2. [-1] , [-2] , ... 이런 방식으로 그냥 출력
+# 1-3. 1-2 방식으로 저장한 것을 출력
+# 2. 내장함수 reverse 사용 엄금
+# 3. pop 사용 불가능
 
+# 권장 해결방식
+# - 사용 제한 및 금지 사항을 준수합니다.
+# - 입력받은 문자를 저장한 변수가 ?부분을 거쳐 그 변수의 문자 위치들이 실제로 바뀌어 있어야 됨
+# 이 아래는 가급적 읽지 마세요.(원하지 않는 답안 예시)
 
+i = []
+word=input("문자를 입력하세요 : ")
+# ? # 입력받은 문자열의 순서를 뒤집는 처리부분(func)을 완성하세요
+for i in word:
+    print()
 
-    # if j == 0:
-    #     print(" " * (a * 1 - 1)+i)
-    # if j == a-2:
-    #     print(" "*(a-2)+i+" "*(a-(a-5))+i+" "*(a-2))
-    # if j == a-1:
-    #     print(i * (a * 2 - 1))
-
-# a = int(input("숫자를 입력하세요: "))
-# for j in range(a):
-#     i = '*'
-#     if j == 0 or j == a-1:
-#         print(i*a)
-#     else:
-#         print(i+" "*(a-2)+i)
+print(i)
+# print(result) # 출력 양식은 수정해도 상관없음.
