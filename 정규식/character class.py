@@ -101,6 +101,75 @@ import re
 # python three"""
 # print(p.findall(data))
 
-p = re.compile(r"(\b\w+)\s+\1")
-m = p.search("Paris in the the spring").group()
-print(m)
+# p = re.compile(r"(\b\w+)\s+\1")
+# m = p.search("Paris in the the spring").group()
+# print(m)
+
+# p = re.compile(r"(\w+)\s\1") # 백슬러시를 하기위해 r을 넣어줘서 구분해줘야한다.
+# m = p.search("sdf Hello Hello").group()
+# print(m)
+
+# p = re.compile(r"(\w+)\s(\w+)\s\1\s\2") # \2 2번쨰 그룹 참조
+# m = p.search("sdf Hello World Hello World Hello dkfjksdk").group()
+# print(m)
+#
+# p = re.compile(r"(\w+)\s(\w+)\s\2\s\1")
+# m = p.search("sdf Hello World World Hello dkfjksdk").group()
+# print(m)
+
+# print("첫번째 그룹 이름 활용") (그룹네이밍)
+# p = re.compile(r"(?P<greeting>\w+)\s\1")
+# m = p.search("sdf Hello Hello ")
+# print(m.group("greeting"))
+
+# print("\n두번째 그룹 이름 활용")
+# p = re.compile(r"(?P<greeting>\w+)\s(?P<destination>\w+)\s\1\s\2")
+# m = p.search("sdf Hello World Hello World dfskdfsk ")
+# print(m.group("greeting"))
+# print(m.group("destination"))
+# print(m.group("destination")) # 그룹이름으로 매칭된 단어를 가져올 수 있다.
+
+# p = re.compile(".+:") # :이 나온다 # http: 까지 나온다. (전방탐색)
+# m = p.search("http://google.com")
+# print(m.group())
+#
+# p = re.compile(".+(?=:)") # : 는 소모되지 않는다. # http까지만 나온다. (긍정형 전방 탐색)
+# m = p.search("http://google.com")
+# print(m.group())
+
+def check_match(p,file_name):
+    m = p.match(file_name)
+    if m:
+        print(m)
+
+# Step1] 파일명.확장자를 나타내는 정규식
+file_name_candidates=["foo.bar","autoexec.bat","sendmail.cf"]
+
+p = re.compile(".*[.].*$")
+
+print("첫번째 정규식 테스트: .*[.].*$")
+for file_name in file_name_candidates:
+    check_match(p,file_name)
+
+# Step2] 확장자가 bat 파일 제외
+p = re.compile(".*[.][^b].*$")
+print("\n두번째 정규식 테스트: .*[.][^b].*$")
+for file_name in file_name_candidates:
+    check_match(p,file_name)
+
+# Step3] 확장자가 bat 파일 제외 두번쨰 시도
+p = re.compile(".*[.]([^b]..|.[^a].|..[^t])$") # or(|)가 들어갔긴 때문에 [^b]. 만 해주면 bat만 제외한 것을 나오게할 수 있다.
+print("\n세번째 정규식 테스트: .*[.]([^b]..|.[^a].|..[^t]$")
+for file_name in file_name_candidates:
+    check_match(p,file_name)
+
+# Step4] 확장자가 bat 파일 제외 세번쨰 시도
+p = re.compile(".*[.]([^b].?.?|.[^a]?.?|..?[^t]?)$") # ?는 .(0~1번 반복가능하게) .에 아무것도 안들어가도 가능하게
+print("\n네번째 정규식 테스트: .*[.]([^b].?.?|.[^a]?.?|..?[^t]?)$")
+for file_name in file_name_candidates:
+    check_match(p,file_name)
+
+p = re.compile(".*[.](?!bat$).*") # (부정형 전방탐색)
+print("\n부정형전방탐색 테스트: .*[.]([^b].?.?|.[^a]?.?|..?[^t]?)$")
+for file_name in file_name_candidates:
+    check_match(p,file_name)

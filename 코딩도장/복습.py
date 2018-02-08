@@ -128,6 +128,32 @@
 #  *     *
 # *********
 
+while 1:
+    a = int(input("숫자를 입력하세요: "))
+    c = 2
+    b = 1
+    for j in range(a):
+        s = '*'
+        if j == 0:
+            print(" "*(a-1)+s)
+        if j != 0 and j != a-1:
+            for i in range(a-2):
+                if i == 0:
+                    print(" "*(a-c)+s+" "*(b)+s+" "*(a-2))
+                    b += 2
+                    c += 1
+        if j == a-1:
+            print(s*(a*2-1))
+
+
+
+    # if j == 0:
+    #     print(" " * (a * 1 - 1)+i)
+    # if j == a-2:
+    #     print(" "*(a-2)+i+" "*(a-(a-5))+i+" "*(a-2))
+    # if j == a-1:
+    #     print(i * (a * 2 - 1))
+
 # a = int(input("숫자를 입력하세요: "))
 # for j in range(a):
 #     i = '*'
