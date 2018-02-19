@@ -24,12 +24,12 @@ with open_workbook(input_file) as workbook:
                 cell_value = worksheet.cell_value(row_index, column_index)
                 cell_type = worksheet.cell_type(row_index, column_index)
                 if cell_type == 3:
-                    date_cell = xldate_as_tuple(cell_value, workbook.datemode)
-                    date_cell = date(*date_cell[0:3]).strftime('%m/%d%/%Y')
+                    date_cell = xldate_as_tuple(cell_value,workbook.datemode)
+                    date_cell = date(*date_cell[0:3]).strftime('%m/%d/%Y')
                     row_list.append(date_cell)
                 else:
                     row_list.append(cell_value)
-        if row_list:
+        if row_list: # row_list에 값이 있을 경우에만 append 한다.
             data.append(row_list)
 
     for list_index, output_list in enumerate(data):

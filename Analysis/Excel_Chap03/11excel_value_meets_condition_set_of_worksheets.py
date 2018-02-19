@@ -19,7 +19,7 @@ with open_workbook(input_file) as workbook:
     data = []
     for sheet_index in range(workbook.nsheets):
         if sheet_index in my_sheets:
-            worksheet = workbook.sheesheet_by_index(sheet_index)
+            worksheet = workbook.sheet_by_index(sheet_index)
             if first_worksheet:
                 header_row = worksheet.row_values(0)
                 data.append(header_row)
