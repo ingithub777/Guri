@@ -28,6 +28,8 @@ statement = "INSERT INTO sales VALUES(?, ?, ?, ?)"
 con.executemany(statement, data)
 con.commit()
 
+print("")
+print("갱신")
 # CSV 파일을 읽고, 특정 행의 데이터를 갱신한다.
 file_reader = csv.reader(open(input_file, 'r'), delimiter=',')
 header = next(file_reader, None)
@@ -39,6 +41,8 @@ for row in file_reader:
     con.execute("UPDATE sales SET amount=?, date=? WHERE customer=?;", data)
 con.commit()
 
+print("")
+print("지우기")
 # 지우기
 delete_table = "delete from sales where amount=679.40"
 con.execute(delete_table)
