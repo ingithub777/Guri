@@ -1,9 +1,9 @@
 import struct
 def to_csv(name, maxdata):
     # 레이블 파일과 이미지 파일 열기
-    lbl_f = open("./mnist/"+name+"-labels-idx1-ubyte", "rb")
-    img_f = open("./mnist/"+name+"-images-idx3-ubyte", "rb")
-    csv_f = open("./mnist/"+name+".csv", "w", encoding="utf-8")
+    lbl_f = open("./mnist_/"+name+"-labels-idx1-ubyte", "rb")
+    img_f = open("./mnist_/"+name+"-images-idx3-ubyte", "rb")
+    csv_f = open("./mnist_/"+name+".csv", "w", encoding="utf-8")
     # 헤더 정보 읽기 --- (※1)
     mag, lbl_count = struct.unpack(">II", lbl_f.read(8))
     mag, img_count = struct.unpack(">II", img_f.read(8))
@@ -22,7 +22,7 @@ def to_csv(name, maxdata):
         if idx < 10:
             s = "P2 28 28 255\n"
             s += " ".join(sdata)
-            iname = "./mnist/{0}-{1}-{2}.pgm".format(name,idx,label)
+            iname = "./mnist_/{0}-{1}-{2}.pgm".format(name,idx,label)
             with open(iname, "w", encoding="utf-8") as f:
                 f.write(s)
     csv_f.close()

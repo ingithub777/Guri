@@ -11,8 +11,8 @@ def load_csv(fname):
             vals = list(map(lambda n: int(n) / 256, cols))
             images.append(vals)
     return {"labels":labels, "images":images}
-data = load_csv("./mnist/train.csv")
-test = load_csv("./mnist/t10k.csv")
+data = load_csv("./mnist_/train.csv")
+test = load_csv("./mnist_/t10k.csv")
 # 학습하기 --- (※2)
 clf = svm.SVC()
 clf.fit(data["images"], data["labels"])
